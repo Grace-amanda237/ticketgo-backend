@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: ticketgo-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    repo: https://github.com/Grace-amanda237/ticketgo-backend
+    branch: main
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ticketgo-db
+          property: connectionString
+
+databases:
+  - name: ticketgo-db
+    plan: free
+    databaseName: ticketgo
+    user: ticketuser
