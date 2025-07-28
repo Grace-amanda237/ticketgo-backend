@@ -1,30 +1,21 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const pool = require('./db');
-const authRoutes = require('./routes/authRoutes');
+const bodyParser = require('body-parser');
+
+const authRoutes = require('./routes/auth');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
-app.use(express.json());
-
-// Routes
+app.use(bodyParser.json());
 app.use('/api', authRoutes);
 
-// Test de connexion à la base
-app.get('/api/test-db', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT NOW()');
-    res.json({ success: true, time: result.rows[0].now });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, error: 'Erreur de connexion à la base' });
-  }
+app.get('/', (req, res) => {
+  res.send('🎫 TicketGo backend est en ligne !');
 });
 
-// Lancement du serveur
-const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Serveur lancé sur le port ${PORT}`);
+  console.log(`✅ Serveur lancé sur le port ${PORT}`);
 });
